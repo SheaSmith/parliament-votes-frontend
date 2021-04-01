@@ -1,16 +1,34 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { HomeComponent } from './components/home/home.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { VotesBarComponent } from './components/home/question-list-item/votes-bar/votes-bar.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { QuestionListItemComponent } from './components/home/question-list-item/question-list-item.component';
+import { QuestionComponent } from './components/question/question.component';
+import { PieGraphComponent } from './components/question/pie-graph/pie-graph.component';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    HomeComponent,
+    NavbarComponent,
+    QuestionListItemComponent,
+    VotesBarComponent,
+    FooterComponent,
+    QuestionComponent,
+    PieGraphComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    HttpClientModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

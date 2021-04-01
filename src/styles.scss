@@ -1,1 +1,38 @@
+@import url("https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap");
+
+$primary: #254e70;
+$secondary: #ecd444;
+$body-color: $primary;
+
+$font-family-sans-serif: "IBM Plex Sans", sans-serif;
+
 /* You can add global styles to this file, and also import other style files */
+@import "../node_modules/bootstrap/scss/bootstrap.scss";
+
+.btn i {
+    color: $body-color;
+}
+
+.btn-primary i {
+    color: $secondary;
+}
+
+.btn-light {
+    color: $body-color;
+}
+
+.bs-popover-bottom .popover-header::before,
+.bs-popover-auto[x-placement^="bottom"] .popover-header::before {
+    border-bottom: none;
+}
+
+.bs-popover-bottom,
+.bs-popover-auto[x-placement^="bottom"] {
+    margin-top: 0.1rem;
+}
+
+html {
+    position: relative;
+    min-height: 100%;
+    scroll-behavior: smooth;
+}

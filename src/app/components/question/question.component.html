@@ -1,0 +1,34 @@
+<div *ngIf="question">
+    <h1>{{question.title}}</h1>
+    <h3 *ngIf="question.subtitle">{{question.subtitle}}</h3>
+    <p class="mb-4" *ngIf="question.description">{{question.description}}</p>
+
+    <div class="row no-gutters row-eq-height">
+        <div class="col-4">
+            <div class="card m-2">
+                <div class="d-flex align-items-center justify-content-center flex-row p-4">
+                    <i class="fa {{question.getPassedIcon()}} fa-3x text-{{question.getPassedColour()}} mr-2"></i>
+
+                    <p class="font-weight-bold text-center mb-0 text-{{question.getPassedColour()}}"
+                        *ngIf="question.voiceVote != null">
+                        {{question.getPassedText()}} via
+                        voice vote</p>
+                    <p class="font-weight-bold text-center mb-0 text-{{question.getPassedColour()}}"
+                        *ngIf="question.partyVotes != null">
+                        {{question.getPassedText()}} via
+                        party vote</p>
+                    <p class="font-weight-bold text-center mb-0 text-{{question.getPassedColour()}}"
+                        *ngIf="question.personalVotes != null">
+                        {{question.getPassedText()}}
+                        via personal vote</p>
+                </div>
+
+                <div class="row no-gutters" *ngIf="votesInFavour != null && votesOpposed != null">
+                    <div class="col-6">
+                        <app-pie-graph [votes]="votesInFavour" [totalVotes]="question.getTotalVotes()"></app-pie-graph>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
