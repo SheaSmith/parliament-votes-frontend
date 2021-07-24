@@ -14,4 +14,8 @@ export class Member {
         this.imageCopyright = get.imageCopyright;
         this.tenures = get.tenures.map(t => new Tenure(t));
     }
+
+    getTenureAtDate(date: Date): Tenure {
+        return this.tenures.filter(t => t.start <= date && (t.end >= date || t.end == null))[0];
+    }
 }

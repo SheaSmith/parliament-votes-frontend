@@ -1,3 +1,4 @@
+import { Config } from "./config";
 import { Bill } from "./legislation/bill";
 import { Member } from "./organisational/member";
 import { Parliament } from "./organisational/parliament";
@@ -22,7 +23,7 @@ export class Question {
     partyVotes: PartyVote[];
     personalVotes: PersonalVote[];
 
-    constructor(get: any) {
+    constructor(get: any, config: Config) {
         this.id = get.id;
         this.title = get.title;
         this.subtitle = get.subtitle;
@@ -32,12 +33,12 @@ export class Question {
         this.stage = get.stage == null ? null : Stage[get.stage as string];
         this.clause = get.clause;
         this.personalVoteConservativeViewPoint = get.personalVoteConservativeViewPoint;
-        this.member = get.member == null ? null : new Member(get.member);
-        this.bill = get.bill == null ? null : new Bill(get.bill);
-        this.parliament = get.parliament == null ? null : new Parliament(get.parliament);
-        this.voiceVote = get.voiceVote == null ? null : new VoiceVote(get.voiceVote);
-        this.partyVotes = get.partyVotes == null ? null : get.partyVotes.map(p => new PartyVote(p));
-        this.personalVotes = get.personalVotes == null ? null : get.personalVotes.map(p => new PersonalVote(p));
+        this.member = get.memberId == null ? null : new Member(config.members[get.memberId]);
+        this.bill = get.bill == null ? null : new Bill(get.bill, config);
+        this.parliament = get.parliamentNumber == null ? null : new Parliament(config.parliaments[get.parliamentNumber]);
+        this.voiceVote = get.voiceVote == null || get.voiceVote.length == 0 ? null : new VoiceVote(get.voiceVote[0]);
+        this.partyVotes = get.partyVotes == null || get.partyVotes.length == 0 ? null : get.partyVotes.map(p => new PartyVote(p, config));
+        this.personalVotes = get.personalVotes == null || get.personalVotes.length == 0 ? null : get.personalVotes.map(p => new PersonalVote(p, config));
     }
 
     hasPassed(): boolean | string {
@@ -61,7 +62,7 @@ export class Question {
                     }
                 }
                 else {
-                    if (complexPositions[p.complexPosition]) {
+                    if (complexPositions[p.complexPosition] != null) {
                         complexPositions[p.complexPosition] += p.numberOfVotes;
                     }
                     else {
@@ -104,11 +105,11 @@ export class Question {
                     }
                 }
                 else {
-                    if (complexPositions[p.complexPosition]) {
+                    if (complexPositions[p.complexPosition] != null) {
                         complexPositions[p.complexPosition]++;
                     }
                     else {
-                        complexPositions[p.complexPosition]++;
+                        complexPositions[p.complexPosition] = 1;
                     }
                 }
             });
@@ -140,7 +141,7 @@ export class Question {
             return 'Defeated';
         }
         else {
-            return `Position ${this.hasPassed()}`;
+            return `Position "${this.hasPassed()}" approved `;
         }
     }
 
@@ -152,7 +153,7 @@ export class Question {
             return 'fa-times';
         }
         else {
-            return 'fa-question';
+            return 'fa-';
         }
     }
 

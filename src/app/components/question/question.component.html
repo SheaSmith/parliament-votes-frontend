@@ -1,31 +1,291 @@
 <div *ngIf="question">
+    <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
+        Tooltip on top
+      </button>
     <h1>{{question.title}}</h1>
     <h3 *ngIf="question.subtitle">{{question.subtitle}}</h3>
     <p class="mb-4" *ngIf="question.description">{{question.description}}</p>
 
-    <div class="row no-gutters row-eq-height">
-        <div class="col-4">
+    <div class="row g-0 row-eq-height">
+        <div class="col-12" [class.col-lg-4]="question.bill != null" [class.col-lg-6]="question.bill == null">
             <div class="card m-2">
                 <div class="d-flex align-items-center justify-content-center flex-row p-4">
-                    <i class="fa {{question.getPassedIcon()}} fa-3x text-{{question.getPassedColour()}} mr-2"></i>
+                    <i class="fa {{question.getPassedIcon()}} fa-3x text-{{question.getPassedColour()}} me-2"></i>
 
-                    <p class="font-weight-bold text-center mb-0 text-{{question.getPassedColour()}}"
+                    <p class="fw-bold text-center mb-0 text-{{question.getPassedColour()}}"
                         *ngIf="question.voiceVote != null">
                         {{question.getPassedText()}} via
                         voice vote</p>
-                    <p class="font-weight-bold text-center mb-0 text-{{question.getPassedColour()}}"
+                    <p class="fw-bold text-center mb-0 text-{{question.getPassedColour()}}"
                         *ngIf="question.partyVotes != null">
                         {{question.getPassedText()}} via
                         party vote</p>
-                    <p class="font-weight-bold text-center mb-0 text-{{question.getPassedColour()}}"
+                    <p class="fw-bold text-center mb-0 text-{{question.getPassedColour()}}"
                         *ngIf="question.personalVotes != null">
                         {{question.getPassedText()}}
                         via personal vote</p>
                 </div>
 
-                <div class="row no-gutters" *ngIf="votesInFavour != null && votesOpposed != null">
-                    <div class="col-6">
-                        <app-pie-graph [votes]="votesInFavour" [totalVotes]="question.getTotalVotes()"></app-pie-graph>
+                <div class="row g-0"
+                    *ngIf="votesInFavour != null && votesOpposed != null && (question.hasPassed() == true || question.hasPassed() == false)">
+                    <div class="col-6 px-2">
+                        <app-pie-graph [votes]="votesInFavour" [totalVotes]="question.getTotalVotes()"
+                            [inFavour]="true"></app-pie-graph>
+                    </div>
+
+                    <div class="col-6 px-2">
+                        <app-pie-graph [votes]="votesOpposed" [totalVotes]="question.getTotalVotes()"
+                            [inFavour]="false"></app-pie-graph>
+                    </div>
+                </div>
+
+                <div class="alert alert-info mx-3 mb-3" *ngIf="question.voiceVote != null">
+                    <h4 class="alert-heading text-center">About Voice Votes</h4>
+
+                    <p>
+                        Voice votes are when the vote is taken orally,
+                        with those in favour saying 'Aye' and those
+                        opposed saying 'No'. This happens before all
+                        votes, including party and personal votes.</p>
+
+                    <p>Voice votes are taken as the final vote in two
+                        circumstances. Firstly, if no one is opposed to
+                        a question, then the voice vote is taken.
+                        Secondly, if a member on the losing side does
+                        not call for a party or personal vote, then one is
+                        not held. This is very uncommon, as parties
+                        (and MPs) usually wish to have their positions
+                        recorded. Hansard (the official Parliamentary
+                        record) makes no distinctions between
+                        unanimous voice votes and contested votes
+                        that do not have a party vote requested, so
+                        we are not able to differentiate these two vote
+                        types. The distinction can only be made when
+                        manually watching the on demand video for a
+                        particular vote.</p>
+
+                    <p>For these reasons, Vote Tracker treats these
+                        votes are being unanimous, as either all parties
+                        agree, or those on the losing side do not feel
+                        strongly enough to call for a party vote.
+                    </p>
+                </div>
+
+                <div class="row g-0 px-2 mb-3"
+                    *ngIf="votesInFavour != null && votesOpposed != null && otherVotes != null && notVoting != null">
+                    <div class="col-12 my-1 px-2 border-bottom border-primary d-flex justify-content-between"
+                        *ngIf="votesInFavour.length != 0">
+                        <span>Ayes</span>
+                        <span>{{totalInFavour}}</span>
+                    </div>
+
+                    <div class="col-12 py-1 px-2 rounded my-1 row g-0 {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
+                        *ngFor="let vote of votesInFavour"
+                        style="background-color: {{vote.party == null ? '#DDDDDD' : vote.party.colour}};">
+                        <span class="col">{{vote.party == null ? vote.member.name : vote.party.name}}</span>
+                        <span class="col-auto">{{vote.numberOfVotes}}</span>
+
+                        <div class="col-12" *ngIf="vote.splitPartyVotes.length != 0">
+                            <div><small class="font-italic">
+                                    {{question.personalVotes != null ? 'Personal vote' : 'Split vote'}}</small>
+                                <small><i class="far fa-question-circle ms-1 cursor-help" data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="{{question.personalVotes == null ? 'A split party vote is where a party doesn\'t have a common view on an issue, so it\'s MPs vote seperately on the issue.' : 'A personal vote is where each MP votes individually on an issue. These are also called conscience votes.'}}"></i></small>
+                            </div>
+                            <div class="row g-0">
+                                <div *ngFor="let member of vote.splitPartyVotes" class="mp-profile-wrapper">
+                                    <app-mp-picture [member]="member" [date]="question.timestamp"></app-mp-picture>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2 mb-1 px-2 border-bottom border-primary d-flex justify-content-between"
+                        *ngIf="votesOpposed.length != 0">
+                        <span>Noes</span>
+                        <span>{{totalOpposed}}</span>
+                    </div>
+
+                    <div class="col-12 py-1 px-2 rounded my-1 row g-0 {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
+                        *ngFor="let vote of votesOpposed"
+                        style="background-color: {{vote.party == null ? '#DDDDDD' : vote.party.colour}};">
+                        <span class="col">{{vote.party == null ? vote.member.name : vote.party.name}}</span>
+                        <span class="col-auto">{{vote.numberOfVotes}}</span>
+
+                        <div class="col-12" *ngIf="vote.splitPartyVotes.length != 0">
+                            <div><small class="font-italic">
+                                    {{question.personalVotes != null ? 'Personal vote' : 'Split vote'}}</small>
+                                <small><i class="far fa-question-circle ms-1 cursor-help" data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="{{question.personalVotes == null ? 'A split party vote is where a party doesn\'t have a common view on an issue, so it\'s MPs vote seperately on the issue.' : 'A personal vote is where each MP votes individually on an issue. These are also called conscience votes.'}}"></i></small>
+                            </div>
+                            <div class="row g-0">
+                                <div *ngFor="let member of vote.splitPartyVotes" class="mp-profile-wrapper">
+                                    <app-mp-picture [member]="member" [date]="question.timestamp"></app-mp-picture>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 row g-0" *ngFor="let key of getKeys(otherVotes)">
+                        <div class="col-12 mt-2 mb-1 px-2 border-bottom border-primary d-flex justify-content-between">
+                            <span>{{key}}</span>
+                            <span>{{totalOther[key]}}</span>
+                        </div>
+
+                        <div class="col-12 py-1 px-2 rounded my-1 row g-0 {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
+                            *ngFor="let vote of otherVotes[key]"
+                            style="background-color: {{vote.party == null ? '#DDDDDD' : vote.party.colour}};">
+                            <span class="col">{{vote.party == null ? vote.member.name : vote.party.name}}</span>
+                            <span class="col-auto">{{vote.numberOfVotes}}</span>
+
+                            <div class="col-12" *ngIf="vote.splitPartyVotes.length != 0">
+                                <div><small class="font-italic">
+                                        {{question.personalVotes != null ? 'Personal vote' : 'Split vote'}}</small>
+                                    <small><i class="far fa-question-circle ms-1 cursor-help" data-bs-toggle="tooltip"
+                                            data-bs-placement="right"
+                                            title="{{question.personalVotes == null ? 'A split party vote is where a party doesn\'t have a common view on an issue, so it\'s MPs vote seperately on the issue.' : 'A personal vote is where each MP votes individually on an issue. These are also called conscience votes.'}}"></i></small>
+                                </div>
+                                <div class="row g-0">
+                                    <div *ngFor="let member of vote.splitPartyVotes" class="mp-profile-wrapper">
+                                        <app-mp-picture [member]="member" [date]="question.timestamp"></app-mp-picture>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-2 mb-1 px-2 border-bottom border-primary d-flex justify-content-between"
+                        *ngIf="notVoting.length != 0">
+                        <span>Not Voting</span>
+                        <span>{{totalNotVoting}}</span>
+                    </div>
+
+                    <div class="col-12 py-1 px-2 rounded my-1 row g-0 {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
+                        *ngFor="let vote of notVoting"
+                        style="background-color: {{vote.party == null ? '#DDDDDD' : vote.party.colour}};">
+                        <span class="col">{{vote.party == null ? vote.member.name : vote.party.name}}</span>
+                        <span class="col-auto">{{vote.numberOfVotes}}</span>
+
+                        <div class="col-12" *ngIf="vote.splitPartyVotes.length != 0">
+                            <div><small class="font-italic">
+                                    {{question.personalVotes != null ? 'Personal vote' : 'Split vote'}}</small>
+                                <small><i class="far fa-question-circle ms-1 cursor-help" data-bs-toggle="tooltip"
+                                        data-bs-placement="right"
+                                        title="{{question.personalVotes == null ? 'A split party vote is where a party doesn\'t have a common view on an issue, so it\'s MPs vote seperately on the issue.' : 'A personal vote is where each MP votes individually on an issue. These are also called conscience votes.'}}"></i></small>
+                            </div>
+                            <div class="row g-0">
+                                <div *ngFor="let member of vote.splitPartyVotes" class="mp-profile-wrapper">
+                                    <app-mp-picture [member]="member" [date]="question.timestamp"></app-mp-picture>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4 col-12" *ngIf="question.bill != null">
+            <div class="card m-2">
+                <div class="bg-secondary p-3">
+                    <h3 class="m-0">{{question.bill.title}}</h3>
+                </div>
+
+                <div class="p-3 bg-light" [ngSwitch]="question.bill.type">
+                    <i class="fas fa-landmark" *ngSwitchCase="BillType.Government"></i>
+                    <i class="fas fa-map-marked-alt" *ngSwitchCase="BillType.Local"></i>
+                    <i class="fas fa-school" *ngSwitchCase="BillType.Private"></i>
+                    <i class="fas fa-user" *ngSwitchCase="BillType.Members"></i>
+                    <span>
+                        <span *ngSwitchCase="BillType.Government"> Government</span>
+                        <span *ngSwitchCase="BillType.Private"> Private</span>
+                        <span *ngSwitchCase="BillType.Local"> Local</span>
+                        <span *ngSwitchCase="BillType.Members"> Members</span>
+                        bill</span>
+                </div>
+
+                <div class="p-3" *ngIf="question.bill.description">
+                    {{question.bill.description}}
+                </div>
+
+                <div class="row g-0 p-2" *ngFor="let member of question.bill.members">
+                    <div class="col-auto large-mp-profile-wrapper">
+                        <app-mp-picture [member]="member" [date]="question.timestamp"></app-mp-picture>
+                    </div>
+
+                    <div class="col d-flex flex-column justify-content-center ms-2">
+                        <p class="m-0">{{member.name}}
+                            ({{member.getTenureAtDate(question.timestamp).party.name}}{{member.getTenureAtDate(question.timestamp).electorate
+                            == null ? '' : '—' + member.getTenureAtDate(question.timestamp).electorate}})</p>
+                        <p class="m-0 text-muted">Member in charge</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12" [class.col-lg-4]="question.bill != null" [class.col-lg-6]="question.bill == null">
+            <div class="card bg-primary text-white m-2">
+                <div class="row g-0">
+                    <div class="col-auto text-secondary h1 m-0">
+                        <i class="fas {{question.getTypeIcon()}} m-3"></i>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center m-0">
+                        <span>Question type</span>
+                        <span class="fw-bold">{{question.getTypeText()}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-primary text-white m-2" *ngIf="question.stage">
+                <div class="row g-0">
+                    <div class="col-auto text-secondary h1 m-0">
+                        <i class="fas fa-map-marker-alt m-3"></i>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center m-0">
+                        <span>Stage</span>
+                        <span class="fw-bold">{{question.getStageText()}}</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-primary text-white m-2" *ngIf="question.member">
+                <div class="row g-0">
+                    <div class="col-auto text-secondary h1 m-0">
+                        <div class="mover-profile-picture mx-2 my-3">
+                            <app-mp-picture [member]="question.member" [date]="question.timestamp"></app-mp-picture>
+                        </div>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center m-0">
+                        <span>Moved by</span>
+                        <span class="fw-bold">{{question.member.name}}
+                            ({{question.member.getTenureAtDate(question.timestamp).party.name}}{{question.member.getTenureAtDate(question.timestamp).electorate
+                            == null ? '' : '—' +
+                            question.member.getTenureAtDate(question.timestamp).electorate}})</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-primary text-white m-2">
+                <div class="row g-0">
+                    <div class="col-auto text-secondary h1 m-0">
+                        <i class="fas fa-landmark m-3"></i>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center m-0">
+                        <span>Parliament</span>
+                        <span class="fw-bold">{{question.parliament.number | ordinal}} Parliament</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card bg-primary text-white m-2">
+                <div class="row g-0">
+                    <div class="col-auto text-secondary h1 m-0">
+                        <i class="fas fa-clock m-3"></i>
+                    </div>
+                    <div class="col d-flex flex-column justify-content-center m-0">
+                        <span>Date</span>
+                        <span class="fw-bold">{{question.timestamp | date: 'd' | ordinal}}{{question.timestamp | date: '
+                            LLLL yyyy, h:mma'}}</span>
                     </div>
                 </div>
             </div>

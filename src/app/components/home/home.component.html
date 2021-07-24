@@ -4,10 +4,10 @@
     agree or disagree.
 </h5>
 
-<div class="row no-gutters d-lg-flex d-none" *ngIf="toplineStats">
+<div class="row g-0 d-lg-flex d-none" *ngIf="toplineStats">
     <div class="col"></div>
     <div class="col-auto text-center">
-        <h1 class="text-secondary font-weight-bold display-4">
+        <h1 class="text-secondary fw-bold display-4">
             {{toplineStats.votes | number}}
         </h1>
         <h5>Votes</h5>
@@ -15,7 +15,7 @@
 
     <div class="col"></div>
     <div class="col-auto text-center">
-        <h1 class="text-secondary font-weight-bold display-4">
+        <h1 class="text-secondary fw-bold display-4">
             {{toplineStats.partyVotes | number}}
         </h1>
         <h5>Party Votes</h5>
@@ -23,7 +23,7 @@
 
     <div class="col"></div>
     <div class="col-auto text-center">
-        <h1 class="text-secondary font-weight-bold display-4">
+        <h1 class="text-secondary fw-bold display-4">
             {{toplineStats.voiceVotes | number}}
         </h1>
         <h5>Voice Votes</h5>
@@ -31,7 +31,7 @@
 
     <div class="col"></div>
     <div class="col-auto text-center">
-        <h1 class="text-secondary font-weight-bold display-4">
+        <h1 class="text-secondary fw-bold display-4">
             {{toplineStats.personalVotes | number}}
         </h1>
         <h5>Personal Votes</h5>
@@ -39,7 +39,7 @@
 
     <div class="col"></div>
     <div class="col-auto text-center">
-        <h1 class="text-secondary font-weight-bold display-4">
+        <h1 class="text-secondary fw-bold display-4">
             {{toplineStats.members | number}}
         </h1>
         <h5>MPs</h5>
@@ -67,28 +67,34 @@
             <h1>Recent Votes</h1>
             <p class="text-muted" *ngIf="meta.content.length != 0">Displaying {{skip + 1 | number}}-{{(skip + 20 > meta.length ? meta.length : skip + 20) | number}} of {{meta.length | number}}</p>
         </div>
-        <div class="row no-gutters">
+        <div class="row g-0">
             <div class="col-auto">
-                <button class="btn mr-2" [class.btn-light]="voteType != null" [class.btn-primary]="voteType == null" (click)="setVoteType(null)">
-                    <i class="fa fa-check mr-1"></i> All votes
+                <button class="btn me-2" [class.btn-light]="voteType != null" [class.btn-primary]="voteType == null" (click)="setVoteType(null)">
+                    <i class="fa fa-check me-1"></i> All votes
                 </button>
             </div>
 
             <div class="col-auto">
-                <button class="btn btn-light mr-2" [class.btn-light]="voteType != 'PartyVote'" [class.btn-primary]="voteType == 'PartyVote'" (click)="setVoteType('PartyVote')">
-                    <i class="fa fa-users mr-1"></i> Party votes
+                <button class="btn btn-light me-2" [class.btn-light]="voteType != 'PartyVote'" [class.btn-primary]="voteType == 'PartyVote'" (click)="setVoteType('PartyVote')">
+                    <i class="fa fa-users me-1"></i> Party votes
                 </button>
             </div>
 
             <div class="col-auto">
-                <button class="btn btn-light mr-2" [class.btn-light]="voteType != 'PersonalVote'" [class.btn-primary]="voteType == 'PersonalVote'" (click)="setVoteType('PersonalVote')">
-                    <i class="fa fa-user mr-1"></i> Personal votes
+                <button class="btn btn-light me-2" [class.btn-light]="voteType != 'SplitPartyVote'" [class.btn-primary]="voteType == 'SplitPartyVote'" (click)="setVoteType('SplitPartyVote')">
+                    <i class="fa fa-people-arrows me-1"></i> Split party votes
                 </button>
             </div>
 
             <div class="col-auto">
-                <button class="btn btn-light mr-2" [class.btn-light]="voteType != 'VoiceVote'" [class.btn-primary]="voteType == 'VoiceVote'" (click)="setVoteType('VoiceVote')">
-                    <i class="fa fa-bullhorn mr-1"></i> Voice votes
+                <button class="btn btn-light me-2" [class.btn-light]="voteType != 'PersonalVote'" [class.btn-primary]="voteType == 'PersonalVote'" (click)="setVoteType('PersonalVote')">
+                    <i class="fa fa-user me-1"></i> Personal votes
+                </button>
+            </div>
+
+            <div class="col-auto">
+                <button class="btn btn-light me-2" [class.btn-light]="voteType != 'VoiceVote'" [class.btn-primary]="voteType == 'VoiceVote'" (click)="setVoteType('VoiceVote')">
+                    <i class="fa fa-bullhorn me-1"></i> Voice votes
                 </button>
             </div>
         </div>
@@ -96,28 +102,28 @@
         <app-question-list-item *ngFor="let question of meta.content" [question]="question"></app-question-list-item>
 
         <div class="d-flex flex-row flex-wrap justify-content-center align-items-center my-2">
-            <button class="btn mr-2 btn-light" (click)="pageSelector(false)" [disabled]="skip == 0">
+            <button class="btn me-2 btn-light" (click)="pageSelector(false)" [disabled]="skip == 0">
                 <i class="fa fa-chevron-left"></i>
             </button>
 
-            <button *ngIf="showMinPage()" class="btn mr-2 btn-light" (click)="loadPage(1)">
+            <button *ngIf="showMinPage()" class="btn me-2 btn-light" (click)="loadPage(1)">
                 1
             </button>
 
-            <p class="mb-0 mr-2" *ngIf="showMinPage()">...</p>
+            <p class="mb-0 me-2" *ngIf="showMinPage()">...</p>
 
-            <button *ngFor="let page of getPages()" class="btn mr-2" (click)="loadPage(page)"
+            <button *ngFor="let page of getPages()" class="btn me-2" (click)="loadPage(page)"
             [class.btn-light]="getCurrentPage() != page" [class.btn-primary]="getCurrentPage() == page">
                 {{page}}
             </button>
 
-            <p class="mb-0 mr-2" *ngIf="showMaxPage()">...</p>
+            <p class="mb-0 me-2" *ngIf="showMaxPage()">...</p>
 
-            <button *ngIf="showMaxPage()" class="btn mr-2 btn-light" (click)="loadPage(getMaxPage())">
+            <button *ngIf="showMaxPage()" class="btn me-2 btn-light" (click)="loadPage(getMaxPage())">
                 {{getMaxPage()}}
             </button>
 
-            <button class="btn mr-2 btn-light" (click)="pageSelector(true)" [disabled]="skip >= meta.length - 20">
+            <button class="btn me-2 btn-light" (click)="pageSelector(true)" [disabled]="skip >= meta.length - 20">
                 <i class="fa fa-chevron-right"></i>
             </button>
         </div>

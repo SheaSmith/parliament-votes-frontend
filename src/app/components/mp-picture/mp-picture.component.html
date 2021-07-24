@@ -1,0 +1,15 @@
+<div class="h-100 w-100 profile-wrapper">
+    <div class="rounded-circle d-flex align-items-center justify-content-center profile-picture {{getTextClass(tenureAtDate.party == null ? '#DDDDDD' : tenureAtDate.party.colour)}}"
+        style="background-color: {{tenureAtDate.party == null ? '#DDDDDD' : tenureAtDate.party.colour}}; border-color: {{(getTextClass(tenureAtDate.party == null ? '#DDDDDD' : tenureAtDate.party.colour) == 'text-white') ? 'white' : 'var(--primary)'}}; {{member.imageUrl == null ? '' : 'background-image: url(\'' + member.imageUrl + '\');'}} outline-color: {{tenureAtDate.party == null ? '#DDDDDD' : tenureAtDate.party.colour}};"
+        [title]="member.name + ' (' + tenureAtDate.party.name + (tenureAtDate.electorate == null ? '' :  '—' + tenureAtDate.electorate) + ')'">
+
+        <svg width="100%" height="100%" preserveAspectRatio="xMinYMid meet" viewBox="0 0 100 100"
+            xmlns:xlink="http://www.w3.org/1999/xlink" class="profile-text-icon">
+            <text x="50%" y="50%" dominant-baseline="central" text-anchor="middle" font-weight="450"
+                *ngIf="member.imageUrl == null"
+                [attr.fill]="(getTextClass(tenureAtDate.party == null ? '#DDDDDD' : tenureAtDate.party.colour) == 'text-white') ? 'white' : 'var(--primary)'"
+                font-size="75">{{member.name.charAt(0)}}</text>
+        </svg>
+        <!-- <span class="m-0 adjust-size" *ngIf="member.imageUrl == null">{{member.name.charAt(0)}}</span> -->
+    </div>
+</div>

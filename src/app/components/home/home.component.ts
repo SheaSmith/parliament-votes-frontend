@@ -1,6 +1,9 @@
 import { ViewportScroller } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { Config } from 'src/app/models/config';
+import { ConfigService } from 'src/app/services/config.service';
 import { QuestionsService } from 'src/app/services/questions.service';
 import { StatisticsService } from 'src/app/services/statistics.service';
 import { Meta } from '../../models/meta';
@@ -12,29 +15,44 @@ import { Topline } from '../../models/statistics/topline';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent implements OnInit {
+export class HomeComponent implements OnInit, OnDestroy {
 
   toplineStats: Topline;
   meta: Meta<Question>;
   voteType: string = null;
   skip: number = 0;
+  config: Config;
 
-  constructor(private statsService: StatisticsService, private questionsService: QuestionsService, private route: ActivatedRoute, private router: Router, private viewportScroller: ViewportScroller) { }
+  Object = Object;
+
+  configSubscription: Subscription;
+
+  constructor(private statsService: StatisticsService, private questionsService: QuestionsService, private route: ActivatedRoute, private router: Router, private viewportScroller: ViewportScroller, private configService: ConfigService) { }
 
   ngOnInit(): void {
-    this.statsService.getTopline().subscribe(t => this.toplineStats = t);
+    this.configSubscription = this.configService.getConfig().subscribe(c => {
+      this.config = c;
+      this.statsService.getTopline().subscribe(t => this.toplineStats = t);
 
-    this.route.queryParamMap.subscribe(p => {
-      if (p['params']['page'] && !isNaN(p['params']['page'])) {
-        this.skip = p['params']['page'] * 20 - 20;
-      }
-
-      if (p['params']['voteType'] && [ 'PartyVote', 'VoiceVote', 'PersonalVote' ].indexOf(p['params']['voteType']) != -1) {
-        this.voteType = p['params']['voteType'];
-      }
-
-      this.getQuestions();
+      this.route.queryParamMap.subscribe(p => {
+        if (p['params']['page'] && !isNaN(p['params']['page'])) {
+          this.skip = p['params']['page'] * 20 - 20;
+        }
+  
+        if (p['params']['voteType'] && [ 'PartyVote', 'VoiceVote', 'PersonalVote', 'SplitPartyVote' ].indexOf(p['params']['voteType']) != -1) {
+          this.voteType = p['params']['voteType'];
+        }
+  
+        this.getQuestions();
+      });
     });
+    
+  }
+
+  ngOnDestroy() {
+    if (this.configSubscription != null) {
+      this.configSubscription.unsubscribe();
+    }
   }
 
   setVoteType(voteType: string) {
@@ -46,7 +64,7 @@ export class HomeComponent implements OnInit {
   }
 
   private getQuestions() {
-    this.questionsService.getRecentQuestions(this.skip, this.voteType).subscribe(m => {
+    this.questionsService.getRecentQuestions(this.skip, this.voteType, this.config).subscribe(m => {
       this.meta = m;
 
       // Reset the page if too long and remove meta for now

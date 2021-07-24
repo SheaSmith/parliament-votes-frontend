@@ -12,6 +12,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { QuestionListItemComponent } from './components/home/question-list-item/question-list-item.component';
 import { QuestionComponent } from './components/question/question.component';
 import { PieGraphComponent } from './components/question/pie-graph/pie-graph.component';
+import { MpPictureComponent } from './components/mp-picture/mp-picture.component';
+import { OrdinalPipe } from './pipes/ordinal.pipe';
 
 @NgModule({
   declarations: [
@@ -22,7 +24,9 @@ import { PieGraphComponent } from './components/question/pie-graph/pie-graph.com
     VotesBarComponent,
     FooterComponent,
     QuestionComponent,
-    PieGraphComponent
+    PieGraphComponent,
+    MpPictureComponent,
+    OrdinalPipe
   ],
   imports: [
     BrowserModule,

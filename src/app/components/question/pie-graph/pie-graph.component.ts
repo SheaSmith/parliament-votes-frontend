@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import * as d3 from 'd3';
 import { arc, pie } from 'd3';
+import { data } from 'jquery';
 import { Member } from 'src/app/models/organisational/member';
 import { Party } from 'src/app/models/organisational/party';
 
@@ -20,6 +21,9 @@ export class PieGraphComponent implements AfterViewInit {
   @Input()
   totalVotes: number;
 
+  @Input()
+  inFavour: boolean;
+
   constructor() { }
 
   ngAfterViewInit(): void {
@@ -33,7 +37,7 @@ export class PieGraphComponent implements AfterViewInit {
     //   .attr('height', '100%').attr('viewBox', (-width / 2) + ' ' + (-height / 2) + ' ' + width + ' ' + height)
     //   .attr('preserveAspectRatio', 'xMinYMin');
 
-    // const remainingVotes = this.totalVotes - this.votes.map(v => v.numberOfVotes).reduce((a, b) => a + b, 0);
+    const remainingVotes = this.totalVotes - this.votes.map(v => v.numberOfVotes).reduce((a, b) => a + b, 0);
 
     // const ids = this.votes.map(v => v.party == null ? v.member.id.toString() : v.party.id.toString());
     // ids.push('remaining-votes');
@@ -65,27 +69,36 @@ export class PieGraphComponent implements AfterViewInit {
     //   .attr('d', arc as any)
     //   .attr('fill', d => colours[d.index])
 
-    var dataset = [
-      { label: 'Abulia', count: 10 }, 
-      { label: 'Betelgeuse', count: 20 },
-      { label: 'Cantaloupe', count: 30 },
-      { label: 'Dijkstra', count: 40 }
-    ];
+    var dataset = this.votes.map(v => ({
+      label: v.party == null ? v.member.name + v.member.id : v.party.name + v.party.id,
+      count: v.numberOfVotes
+    }));
 
-    var width = 360;
-    var height = 360;
+    dataset.push({ label: 'remaining-votes', count: remainingVotes });
+
+    const colours = {};
+
+    this.votes.forEach(v => {
+      colours[v.party == null ? v.member.name + v.member.id : v.party.name + v.party.id] = v.party == null ? '#DDDDDD' : v.party.colour;
+    });
+
+    colours['remaining-votes'] = '#f8f9fa';
+
+    const width = parseInt(d3.select(this.graph.nativeElement).style('width'));
+    const height = width;
     var radius = Math.min(width, height) / 2;
-    var donutWidth = 75;                            // NEW
+    var donutWidth = 30;                            // NEW
 
     var color = d3.scaleOrdinal(d3.schemeCategory10);
 
     var svg = d3.select(this.graph.nativeElement)
       .append('svg')
-      .attr('width', width)
-      .attr('height', height)
+      .attr('width', '100%')
+      .attr('height', '100%')
+      .attr('viewBox','0 0 ' + height + ' ' + width)
+      .attr('preserveAspectRatio', 'xMinYMin')
       .append('g')
-      .attr('transform', 'translate(' + (width / 2) + 
-        ',' + (height / 2) + ')');
+      .attr("transform", "translate(" + Math.min(width,height) / 2 + "," + Math.min(width,height) / 2 + ")");
 
     var arc = d3.arc()
       .innerRadius(radius - donutWidth)             // NEW
@@ -101,8 +114,12 @@ export class PieGraphComponent implements AfterViewInit {
       .append('path')
       .attr('d', arc as any)
       .attr('fill', function(d, i) { 
-        return color(d.data['label']);
+        return colours[d.data['label']];
       });
+
+    svg.append('text')
+    .attr('text-anchor', 'middle')
+    .text(`${this.inFavour ? 'Ayes' : 'Noes'} ${this.votes.map(v => v.numberOfVotes).reduce((a, b) => a + b, 0)}`)
   }
 
 }

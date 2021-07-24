@@ -2,7 +2,6 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Member } from 'src/app/models/organisational/member';
 import { Party } from 'src/app/models/organisational/party';
 import { getTextClass } from 'src/app/text-color-utility';
-declare var $;
 
 @Component({
   selector: '[votes-bar]',

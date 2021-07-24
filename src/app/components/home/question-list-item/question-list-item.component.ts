@@ -4,7 +4,6 @@ import { getTextClass } from 'src/app/text-color-utility';
 import { Member } from '../../../models/organisational/member';
 import { Party } from '../../../models/organisational/party';
 import { Question } from '../../../models/question';
-declare var $;
 
 @Component({
   selector: 'app-question-list-item',

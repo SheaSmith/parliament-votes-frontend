@@ -1,3 +1,4 @@
+import { Config } from "../config";
 import { Member } from "../organisational/member";
 import { Parliament } from "../organisational/parliament";
 import { Question } from "../question";
@@ -13,16 +14,16 @@ export class Bill {
     parliaments: Parliament[];
     questions: Question[];
 
-    constructor(get: any) {
+    constructor(get: any, config: Config) {
         this.id = get.id;
         this.title = get.title;
         this.description = get.description;
         this.number = get.number;
         this.lastUpdated = get.lastUpdated;
-        this.members = get.members == null ? null : get.members.map(m => new Member(m));
+        this.members = get.memberIds.map(m => new Member(config.members[m]));
         this.type = BillType[get.type as string];
-        this.parliaments = get.parliaments.map(p => new Parliament(p));
-        this.questions = get.questions == null ? null : get.questions.map(q => new Question(q));
+        this.parliaments = get.parliamentNumbers.map(p => new Parliament(config.parliaments[p]));
+        this.questions = get.questions == null ? null : get.questions.map(q => new Question(q, config));
     }
 }
 

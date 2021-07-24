@@ -1,14 +1,14 @@
 <a class="card overflow-hidden my-4 text-decoration-none" routerLink="/question/{{question.id}}">
-    <div class="row no-gutters">
+    <div class="row g-0">
         <div
             class="col-md-2 col-12 text-white bg-{{question.getPassedColour()}} d-flex align-items-center justify-content-center flex-column p-4">
             <i class="fa {{question.getPassedIcon()}} fa-4x"></i>
 
-            <p class="font-weight-bold text-center" *ngIf="question.voiceVote != null">{{question.getPassedText()}} via
+            <p class="fw-bold text-center" *ngIf="question.voiceVote != null">{{question.getPassedText()}} via
                 voice vote</p>
-            <p class="font-weight-bold text-center" *ngIf="question.partyVotes != null">{{question.getPassedText()}} via
+            <p class="fw-bold text-center" *ngIf="question.partyVotes != null">{{question.getPassedText()}} via
                 party vote</p>
-            <p class="font-weight-bold text-center" *ngIf="question.personalVotes != null">{{question.getPassedText()}}
+            <p class="fw-bold text-center" *ngIf="question.personalVotes != null">{{question.getPassedText()}}
                 via personal vote</p>
         </div>
 
@@ -17,39 +17,39 @@
                 <h4>{{question.title}}<span *ngIf="question.subtitle"> ({{question.subtitle}})</span></h4>
                 <p class="text-muted">{{question.description}}</p>
 
-                <div class="row no-gutters">
-                    <div class="col-auto pr-3">
-                        <h5><i class="fa {{question.getTypeIcon()}} pr-2"></i>{{question.getTypeText()}}</h5>
+                <div class="row g-0">
+                    <div class="col-auto pe-3">
+                        <h5><i class="fa {{question.getTypeIcon()}} pe-2"></i>{{question.getTypeText()}}</h5>
                     </div>
 
-                    <div class="col-auto pr-3" *ngIf="question.stage != null">
-                        <h5><i class="fa fa-road pr-2"></i>{{question.getStageText()}}</h5>
+                    <div class="col-auto pe-3" *ngIf="question.stage != null">
+                        <h5><i class="fa fa-road pe-2"></i>{{question.getStageText()}}</h5>
                     </div>
 
-                    <div class="col-auto pr-3">
-                        <h5><i class="fa fa-calendar-day pr-1"></i> {{question.timestamp | date: 'fullDate'}}</h5>
+                    <div class="col-auto pe-3">
+                        <h5><i class="fa fa-calendar-day pe-1"></i> {{question.timestamp | date: 'fullDate'}}</h5>
                     </div>
                 </div>
             </div>
 
-            <div class="row no-gutters px-4 pb-2" *ngIf="question.voiceVote == null">
+            <div class="row g-0 px-4 pb-2" *ngIf="question.voiceVote == null">
                 <div class="col-6">
                     Ayes {{question.getVotesInFavour() | number}}
                 </div>
-                <div class="col-6 text-right">
+                <div class="col-6 text-end">
                     Noes {{question.getVotesOpposed() | number}}
                 </div>
             </div>
 
-            <div class="row no-gutters votes-bar bg-light" *ngIf="question.voiceVote == null"
+            <div class="row g-0 votes-bar bg-light" *ngIf="question.voiceVote == null"
                 (click)="showVoteDetails = !showVoteDetails">
-                <div class="col-6 row no-gutters">
+                <div class="col-6 row g-0">
                     <div style="width: {{vote.numberOfVotes / question.getTotalVotes() * 100}}%;" [votes-bar]
                         *ngFor="let vote of votesInFavour" [vote]="vote" [totalVotes]="question.getTotalVotes()"
                         [personalVote]="question.personalVotes != null" [inFavour]="true"></div>
                 </div>
 
-                <div class="col-6 row no-gutters justify-content-end">
+                <div class="col-6 row g-0 justify-content-end">
                     <div style="width: {{vote.numberOfVotes / question.getTotalVotes() * 100}}%;"
                         *ngFor="let vote of votesOpposed" [votes-bar] [vote]="vote"
                         [totalVotes]="question.getTotalVotes()" [personalVote]="question.personalVotes != null"
@@ -58,7 +58,7 @@
 
                 <div class="col-6" *ngIf="showVoteDetails" [@expandContract]>
                     <div class="px-1 py-1">
-                        <p class="mb-0 mr-1 badge {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
+                        <p class="mb-0 me-1 badge {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
                             style="background-color: {{vote.party == null ? '#DDDDDD' : vote.party.colour}}"
                             *ngFor="let vote of votesInFavour">{{vote.party == null ? vote.member.name :
                             vote.party.name}}: {{vote.numberOfVotes}} {{question.personalVotes == null || vote.member !=
@@ -67,8 +67,8 @@
                 </div>
 
                 <div class="col-6 justify-content-end" *ngIf="showVoteDetails" [@expandContract]>
-                    <div class="px-1 py-1 text-right">
-                        <p class="mb-0 mr-1 badge {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
+                    <div class="px-1 py-1 text-end">
+                        <p class="mb-0 me-1 badge {{getTextClass(vote.party == null ? '#DDDDDD' : vote.party.colour)}}"
                             style="background-color: {{vote.party == null ? '#DDDDDD' : vote.party.colour}}"
                             *ngFor="let vote of votesOpposed">{{vote.party == null ? vote.member.name :
                             vote.party.name}}: {{vote.numberOfVotes}} {{question.personalVotes == null || vote.member !=
