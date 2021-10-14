@@ -1,7 +1,7 @@
 import { AfterViewChecked, AfterViewInit } from '@angular/core';
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { Tooltip } from 'bootstrap';
+import { Popover, Tooltip } from 'bootstrap';
 import { Subscription } from 'rxjs';
 import { Config } from 'src/app/models/config';
 import { BillType } from 'src/app/models/legislation/bill';
@@ -358,7 +358,7 @@ export class QuestionComponent implements OnInit, OnDestroy, AfterViewChecked {
   }
 
   ngAfterViewChecked() {
-    document.querySelectorAll('[data-bs-toggle="tooltip"]').forEach(t => new Tooltip(t));
+
   }
 
   ngOnDestroy() {

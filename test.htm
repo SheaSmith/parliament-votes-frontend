@@ -1,0 +1,865 @@
+<style>
+    .seat-plan {
+        position: relative;
+        width: 100%;
+        height: 100%;
+    }
+
+    body,
+    html {
+        margin: 0;
+    }
+
+    .seat-title {
+        display: block;
+        position: absolute;
+        font-size: 14px;
+    }
+
+    .seat-title.government {
+        top: 85%;
+    }
+
+    .seat-title.opposition {
+        top: 15%;
+    }
+
+    .seat {
+        height: 6%;
+        position: absolute;
+        background: red;
+        aspect-ratio: 1 / 1;
+        border-radius: 50%;
+        text-align: center;
+    }
+
+    .admin-title {
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 48%;
+        width: calc(100% - 5px);
+        margin: 0;
+        font-size: 14px;
+        text-align: center;
+        text-transform: uppercase;
+        transform: translate(-50%, -50%);
+    }
+
+    .clerks {
+        position: absolute;
+        height: 24%;
+        bottom: 38%;
+        left: 8%;
+        width: 5%;
+        background-color: lightgray;
+    }
+
+    .seat-table {
+        height: 24%;
+        bottom: 38%;
+        left: 15%;
+        position: absolute;
+        background-color: lightgray;
+        width: 20%;
+        border-bottom-right-radius: 10000000000000000000000000000000000px;
+        border-top-right-radius: 10000000000000000000000000000000000px;
+    }
+
+    .hansard {
+        height: 24%;
+        bottom: 38%;
+        left: 35.5%;
+        position: absolute;
+        background-color: lightgray;
+        width: 2.5%;
+    }
+
+    .hansard .admin-title {
+        transform: rotate(90deg) translate(-250%, 50%);
+        height: 100%;
+    }
+
+    .admin-table {
+        width: 100%;
+        height: 0;
+        position: relative;
+    }
+
+    .admin-table svg {
+        position: absolute;
+        top: 0;
+        left: 0;
+    }
+
+    .clerks .admin-table {
+        padding-left: 35%;
+    }
+
+    .seat.s-1 {
+        bottom: 47%;
+        left: 0
+    }
+
+    .seat.s-100 {
+        top: 90%;
+        left: 0
+    }
+
+    .seat.s-101 {
+        top: 90%;
+        left: 5%
+    }
+
+    .seat.s-102 {
+        top: 90%;
+        left: 11.7%
+    }
+
+    .seat.s-103 {
+        top: 90%;
+        left: 16.7%
+    }
+
+    .seat.s-104 {
+        top: 90%;
+        left: 23.3%
+    }
+
+    .seat.s-105 {
+        top: 90%;
+        left: 28.5%
+    }
+
+    .seat.s-106 {
+        top: 90%;
+        left: 35%
+    }
+
+    .seat.s-107 {
+        top: 90%;
+        left: 40%
+    }
+
+    .seat.s-108 {
+        top: 90%;
+        left: 47.2%
+    }
+
+    .seat.s-109 {
+        top: 82%;
+        left: 47.2%
+    }
+
+    .seat.s-110 {
+        top: 82%;
+        left: 40%
+    }
+
+    .seat.s-111 {
+        top: 82%;
+        left: 35%
+    }
+
+    .seat.s-112 {
+        top: 82%;
+        left: 28.5%
+    }
+
+    .seat.s-113 {
+        top: 82%;
+        left: 23.3%
+    }
+
+    .seat.s-114 {
+        top: 82%;
+        left: 16.7%
+    }
+
+    .seat.s-115 {
+        top: 82%;
+        left: 11.7%
+    }
+
+    .seat.s-116 {
+        top: 82%;
+        left: 5%
+    }
+
+    .seat.s-117 {
+        top: 82%;
+        left: 0
+    }
+
+    .seat.s-118 {
+        top: 74%;
+        left: 0
+    }
+
+    .seat.s-119 {
+        top: 74%;
+        left: 5%
+    }
+
+    .seat.s-120 {
+        top: 74%;
+        left: 11.7%
+    }
+
+    .seat.s-121 {
+        top: 74%;
+        left: 16.7%
+    }
+
+    .seat.s-122 {
+        top: 74%;
+        left: 23.3%
+    }
+
+    .seat.s-123 {
+        top: 74%;
+        left: 28.5%
+    }
+
+    .seat.s-124 {
+        top: 74%;
+        left: 35%
+    }
+
+    .seat.s-125 {
+        top: 74%;
+        left: 40%
+    }
+
+    .seat.s-126 {
+        top: 74%;
+        left: 47.2%
+    }
+
+    .seat.s-127 {
+        bottom: 74%;
+        left: 47.2%
+    }
+
+    .seat.s-128 {
+        bottom: 74%;
+        left: 40%
+    }
+
+    .seat.s-129 {
+        bottom: 74%;
+        left: 35%
+    }
+
+    .seat.s-130 {
+        bottom: 74%;
+        left: 28.5%
+    }
+
+    .seat.s-131 {
+        bottom: 74%;
+        left: 23.3%
+    }
+
+    .seat.s-132 {
+        bottom: 74%;
+        left: 16.7%
+    }
+
+    .seat.s-133 {
+        bottom: 74%;
+        left: 11.7%
+    }
+
+    .seat.s-134 {
+        bottom: 74%;
+        left: 5%
+    }
+
+    .seat.s-135 {
+        bottom: 74%;
+        left: 0
+    }
+
+    .seat.s-136 {
+        bottom: 82%;
+        left: 0
+    }
+
+    .seat.s-137 {
+        bottom: 82%;
+        left: 5%
+    }
+
+    .seat.s-138 {
+        bottom: 82%;
+        left: 11.7%
+    }
+
+    .seat.s-139 {
+        bottom: 82%;
+        left: 16.7%
+    }
+
+    .seat.s-140 {
+        bottom: 82%;
+        left: 23.3%
+    }
+
+    .seat.s-141 {
+        bottom: 82%;
+        left: 28.5%
+    }
+
+    .seat.s-142 {
+        bottom: 82%;
+        left: 35%
+    }
+
+    .seat.s-143 {
+        bottom: 82%;
+        left: 40%
+    }
+
+    .seat.s-144 {
+        bottom: 82%;
+        left: 47.2%
+    }
+
+    .seat.s-145 {
+        bottom: 90%;
+        left: 47.2%
+    }
+
+    .seat.s-146 {
+        bottom: 90%;
+        left: 40%
+    }
+
+    .seat.s-147 {
+        bottom: 90%;
+        left: 35%
+    }
+
+    .seat.s-148 {
+        bottom: 90%;
+        left: 28.5%
+    }
+
+    .seat.s-149 {
+        bottom: 90%;
+        left: 23.3%
+    }
+
+    .seat.s-150 {
+        bottom: 90%;
+        left: 16.7%
+    }
+
+    .seat.s-151 {
+        bottom: 90%;
+        left: 11.7%
+    }
+
+    .seat.s-152 {
+        bottom: 90%;
+        left: 5%
+    }
+
+    .seat.s-153 {
+        bottom: 90%;
+        left: 0
+    }
+
+    .seat.s-154 {
+        top: 90%;
+        left: 54.8%
+    }
+
+    .seat.s-155 {
+        top: 89.45%;
+        left: 59.57%
+    }
+
+    .seat.s-156 {
+        top: 87.83%;
+        left: 64.2%
+    }
+
+    .seat.s-157 {
+        top: 85.18%;
+        left: 68.54%
+    }
+
+    .seat.s-158 {
+        top: 81.58%;
+        left: 72.47%
+    }
+
+    .seat.s-159 {
+        top: 77.14%;
+        left: 75.85%
+    }
+
+    .seat.s-160 {
+        top: 72%;
+        left: 78.6%
+    }
+
+    .seat.s-161 {
+        top: 66.31%;
+        left: 80.62%
+    }
+
+    .seat.s-162 {
+        top: 60.25%;
+        left: 81.86%
+    }
+
+    .seat.s-163 {
+        top: 54%;
+        left: 82.28%
+    }
+
+    .seat.s-164 {
+        top: 54%;
+        left: 76.17%
+    }
+
+    .seat.s-165 {
+        top: 61.25%;
+        left: 75.45%
+    }
+
+    .seat.s-166 {
+        top: 68%;
+        left: 73.31%
+    }
+
+    .seat.s-167 {
+        top: 73.8%;
+        left: 69.91%
+    }
+
+    .seat.s-168 {
+        top: 78.25%;
+        left: 65.49%
+    }
+
+    .seat.s-169 {
+        top: 81.05%;
+        left: 60.33%
+    }
+
+    .seat.s-170 {
+        top: 82%;
+        left: 54.8%
+    }
+
+    .seat.s-171 {
+        top: 74%;
+        left: 54.8%
+    }
+
+    .seat.s-172 {
+        top: 72.48%;
+        left: 60.64%
+    }
+
+    .seat.s-173 {
+        top: 68.14%;
+        left: 65.6%
+    }
+
+    .seat.s-174 {
+        top: 61.65%;
+        left: 68.91%
+    }
+
+    .seat.s-175 {
+        top: 54%;
+        left: 70.07%
+    }
+
+    .seat.s-198 {
+        top: 89.6%;
+        left: 74.54%
+    }
+
+    .seat.s-199 {
+        top: 84.12%;
+        left: 79.29%
+    }
+
+    .seat.s-200 {
+        top: 77.58%;
+        left: 83.16%
+    }
+
+    .seat.s-201 {
+        top: 70.2%;
+        left: 86.03%
+    }
+
+    .seat.s-202 {
+        top: 62.24%;
+        left: 87.79%
+    }
+
+    .seat.s-203 {
+        top: 54%;
+        left: 88.39%
+    }
+
+    .seat.s-204 {
+        top: 54%;
+        left: 94.5%
+    }
+
+    .seat.s-205 {
+        top: 61.33%;
+        left: 94.1%
+    }
+
+    .seat.s-206 {
+        top: 68.51%;
+        left: 92.92%
+    }
+
+    .seat.s-207 {
+        top: 75.4%;
+        left: 90.98%
+    }
+
+    .seat.s-208 {
+        top: 81.86%;
+        left: 88.32%
+    }
+
+    .seat.s-209 {
+        top: 87.77%;
+        left: 84.99%
+    }
+
+    .seat.s-176 {
+        bottom: 54%;
+        left: 70.07%
+    }
+
+    .seat.s-177 {
+        bottom: 61.65%;
+        left: 68.91%
+    }
+
+    .seat.s-178 {
+        bottom: 68.14%;
+        left: 65.6%
+    }
+
+    .seat.s-179 {
+        bottom: 72.48%;
+        left: 60.64%
+    }
+
+    .seat.s-180 {
+        bottom: 74%;
+        left: 54.8%
+    }
+
+    .seat.s-181 {
+        bottom: 82%;
+        left: 54.8%
+    }
+
+    .seat.s-182 {
+        bottom: 81.05%;
+        left: 60.33%
+    }
+
+    .seat.s-183 {
+        bottom: 78.25%;
+        left: 65.49%
+    }
+
+    .seat.s-184 {
+        bottom: 73.8%;
+        left: 69.91%
+    }
+
+    .seat.s-185 {
+        bottom: 68%;
+        left: 73.31%
+    }
+
+    .seat.s-186 {
+        bottom: 61.25%;
+        left: 75.45%
+    }
+
+    .seat.s-187 {
+        bottom: 54%;
+        left: 76.17%
+    }
+
+    .seat.s-188 {
+        bottom: 54%;
+        left: 82.28%
+    }
+
+    .seat.s-189 {
+        bottom: 60.25%;
+        left: 81.86%
+    }
+
+    .seat.s-190 {
+        bottom: 66.31%;
+        left: 80.62%
+    }
+
+    .seat.s-191 {
+        bottom: 72%;
+        left: 78.6%
+    }
+
+    .seat.s-192 {
+        bottom: 77.14%;
+        left: 75.85%
+    }
+
+    .seat.s-193 {
+        bottom: 81.58%;
+        left: 72.47%
+    }
+
+    .seat.s-194 {
+        bottom: 85.18%;
+        left: 68.54%
+    }
+
+    .seat.s-195 {
+        bottom: 87.83%;
+        left: 64.2%
+    }
+
+    .seat.s-196 {
+        bottom: 89.45%;
+        left: 59.57%
+    }
+
+    .seat.s-197 {
+        bottom: 90%;
+        left: 54.8%
+    }
+
+    .seat.s-210 {
+        bottom: 54%;
+        left: 88.39%
+    }
+
+    .seat.s-211 {
+        bottom: 62.24%;
+        left: 87.79%
+    }
+
+    .seat.s-212 {
+        bottom: 70.2%;
+        left: 86.03%
+    }
+
+    .seat.s-213 {
+        bottom: 77.58%;
+        left: 83.16%
+    }
+
+    .seat.s-214 {
+        bottom: 84.12%;
+        left: 79.29%
+    }
+
+    .seat.s-215 {
+        bottom: 89.6%;
+        left: 74.54%
+    }
+
+    .seat.s-216 {
+        bottom: 87.77%;
+        left: 84.99%
+    }
+
+    .seat.s-217 {
+        bottom: 81.86%;
+        left: 88.32%
+    }
+
+    .seat.s-218 {
+        bottom: 75.4%;
+        left: 90.98%
+    }
+
+    .seat.s-219 {
+        bottom: 68.51%;
+        left: 92.92%
+    }
+
+    .seat.s-220 {
+        bottom: 61.33%;
+        left: 94.1%
+    }
+
+    .seat.s-221 {
+        bottom: 82%;
+        left: 94.5%
+    }
+
+    .seat.s-saa {
+        bottom: 54%;
+        left: 94.5%
+    }
+
+    .container {
+        max-width: 100%;
+aspect-ratio: 4 / 3;
+    }
+</style>
+
+<div class="container">
+    <div class="seat-plan">
+        <h4 class="seat-title government">
+            Government
+        </h4>
+
+        <h4 class="seat-title opposition">
+            Opposition
+        </h4>
+
+        <div class="seat s-1"></div>
+        <div class="seat s-100"></div>
+        <div class="seat s-101"></div>
+        <div class="seat s-102"></div>
+        <div class="seat s-103"></div>
+        <div class="seat s-104"></div>
+        <div class="seat s-105"></div>
+        <div class="seat s-106"></div>
+        <div class="seat s-107"></div>
+        <div class="seat s-108"></div>
+        <div class="seat s-109"></div>
+        <div class="seat s-110"></div>
+        <div class="seat s-111"></div>
+        <div class="seat s-112"></div>
+        <div class="seat s-113"></div>
+        <div class="seat s-114"></div>
+        <div class="seat s-115"></div>
+        <div class="seat s-116"></div>
+        <div class="seat s-117"></div>
+        <div class="seat s-118"></div>
+        <div class="seat s-119"></div>
+        <div class="seat s-120"></div>
+        <div class="seat s-121"></div>
+        <div class="seat s-122"></div>
+        <div class="seat s-123"></div>
+        <div class="seat s-124"></div>
+        <div class="seat s-125"></div>
+        <div class="seat s-126"></div>
+        <div class="seat s-127"></div>
+        <div class="seat s-128"></div>
+        <div class="seat s-129"></div>
+        <div class="seat s-130"></div>
+        <div class="seat s-131"></div>
+        <div class="seat s-132"></div>
+        <div class="seat s-133"></div>
+        <div class="seat s-134"></div>
+        <div class="seat s-135"></div>
+        <div class="seat s-136"></div>
+        <div class="seat s-137"></div>
+        <div class="seat s-138"></div>
+        <div class="seat s-139"></div>
+        <div class="seat s-140"></div>
+        <div class="seat s-141"></div>
+        <div class="seat s-142"></div>
+        <div class="seat s-143"></div>
+        <div class="seat s-144"></div>
+        <div class="seat s-145"></div>
+        <div class="seat s-146"></div>
+        <div class="seat s-147"></div>
+        <div class="seat s-148"></div>
+        <div class="seat s-149"></div>
+        <div class="seat s-150"></div>
+        <div class="seat s-151"></div>
+        <div class="seat s-152"></div>
+        <div class="seat s-153"></div>
+        <div class="seat s-154"></div>
+        <div class="seat s-155"></div>
+        <div class="seat s-156"></div>
+        <div class="seat s-157"></div>
+        <div class="seat s-158"></div>
+        <div class="seat s-159"></div>
+        <div class="seat s-160"></div>
+        <div class="seat s-161"></div>
+        <div class="seat s-162"></div>
+        <div class="seat s-163"></div>
+        <div class="seat s-164"></div>
+        <div class="seat s-165"></div>
+        <div class="seat s-166"></div>
+        <div class="seat s-167"></div>
+        <div class="seat s-168"></div>
+        <div class="seat s-169"></div>
+        <div class="seat s-170"></div>
+        <div class="seat s-171"></div>
+        <div class="seat s-172"></div>
+        <div class="seat s-173"></div>
+        <div class="seat s-174"></div>
+        <div class="seat s-175"></div>
+        <div class="seat s-176"></div>
+        <div class="seat s-177"></div>
+        <div class="seat s-178"></div>
+        <div class="seat s-179"></div>
+        <div class="seat s-180"></div>
+        <div class="seat s-181"></div>
+        <div class="seat s-182"></div>
+        <div class="seat s-183"></div>
+        <div class="seat s-184"></div>
+        <div class="seat s-185"></div>
+        <div class="seat s-186"></div>
+        <div class="seat s-187"></div>
+        <div class="seat s-188"></div>
+        <div class="seat s-189"></div>
+        <div class="seat s-190"></div>
+        <div class="seat s-191"></div>
+        <div class="seat s-192"></div>
+        <div class="seat s-193"></div>
+        <div class="seat s-194"></div>
+        <div class="seat s-195"></div>
+        <div class="seat s-196"></div>
+        <div class="seat s-197"></div>
+        <div class="seat s-198"></div>
+        <div class="seat s-199"></div>
+        <div class="seat s-200"></div>
+        <div class="seat s-201"></div>
+        <div class="seat s-202"></div>
+        <div class="seat s-203"></div>
+        <div class="seat s-204"></div>
+        <div class="seat s-205"></div>
+        <div class="seat s-206"></div>
+        <div class="seat s-207"></div>
+        <div class="seat s-208"></div>
+        <div class="seat s-209"></div>
+        <div class="seat s-210"></div>
+        <div class="seat s-211"></div>
+        <div class="seat s-212"></div>
+        <div class="seat s-213"></div>
+        <div class="seat s-214"></div>
+        <div class="seat s-215"></div>
+        <div class="seat s-216"></div>
+        <div class="seat s-217"></div>
+        <div class="seat s-218"></div>
+        <div class="seat s-219"></div>
+        <div class="seat s-220"></div>
+        <div class="seat s-221"></div>
+        <div class="clerks">
+        </div>
+        <div class="seat-table">
+        </div>
+        <div class="hansard">
+        </div>
+    </div>
+</div>

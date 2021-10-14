@@ -1,7 +1,4 @@
 <div *ngIf="question">
-    <button type="button" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Tooltip on top">
-        Tooltip on top
-      </button>
     <h1>{{question.title}}</h1>
     <h3 *ngIf="question.subtitle">{{question.subtitle}}</h3>
     <p class="mb-4" *ngIf="question.description">{{question.description}}</p>

@@ -24,7 +24,7 @@
     "@types/bootstrap": "^5.0.8",
     "@types/jquery": "^3.5.5",
     "@types/popper.js": "^1.11.0",
-    "bootstrap": "^5.0.0",
+    "bootstrap": "^5.0.2",
     "d3": "^6.6.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.0.0",
